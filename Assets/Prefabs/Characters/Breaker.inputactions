@@ -24,8 +24,8 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Ability1",
-                    "type": "Button",
+                    "name": "PrimaryFire",
+                    "type": "PassThrough",
                     "id": "63c3e8c2-15dd-4290-bc66-ba31e3f8fae1",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -33,8 +33,8 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Ability2",
-                    "type": "Button",
+                    "name": "SecondaryFire",
+                    "type": "PassThrough",
                     "id": "f16ff509-9f49-4dfd-8a75-916ab721b603",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -270,7 +270,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Ability1",
+                    "action": "PrimaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -281,7 +281,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "Ability1",
+                    "action": "PrimaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -292,7 +292,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Ability1",
+                    "action": "PrimaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -303,7 +303,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Ability2",
+                    "action": "SecondaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -314,7 +314,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Ability2",
+                    "action": "SecondaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -325,7 +325,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "XR",
-                    "action": "Ability2",
+                    "action": "SecondaryFire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CombatManager : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -35,6 +36,9 @@ public class CombatManager : MonoBehaviour
 
     float totalProjectileAmount;
 
+    Weapon primaryWeapon;
+    Weapon secondaryWeapon;
+
     void Start()
     {
         modList = new List<Modifier>();
@@ -47,17 +51,28 @@ public class CombatManager : MonoBehaviour
         UpdatePlayerMoveSpeed(); // make starting speed
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
+    public Weapon EquipPrimary(Weapon weapon)
+    {
+        if (secondaryWeapon)
+        {
+
+        }
+
+        //UpdateUI-
+        return weapon;
+    }
+    public Weapon EquipSecondary(Weapon weapon)
+    {
+        return weapon;
+    }
     public Modifier AddModifier(Modifier mod)
     {
-        modList.Add(mod); //TODO: MOD IS BEING DESTROYED AND IS NOT IN LIST!!!!!!
-
+        //TODO: MOD IS BEING DESTROYED AND IS NOT IN LIST!!!!!!
+        //Needs an inventory-esque system to add and remove items
+        modList.Add(mod); 
         AddStatsFromMod(mod);
+
         return mod;
     }
 
@@ -83,7 +98,29 @@ public class CombatManager : MonoBehaviour
         UpdatePlayerMoveSpeed();
     }
 
-    void RecalculateStats()
+    private void SubtractModFromStats (Modifier mod)
+    {
+        totalDamageIncrease -= mod.damageIncrease; // flat value increase
+        totalDamageMultiplier -= mod.damageMultiplier; // percentage-based increase
+
+        totalProjectileSpeedIncrease -= mod.projectileSpeedIncrease;
+        totalProjectileSpeedMulitplier -= mod.projectileSpeedMulitplier;
+
+        totalHealthIncrease -= mod.healthIncrease;
+        totalHealthMuliplier -= mod.healthMultiplier;
+
+        totalMoveSpeedIncrease -= mod.moveSpeedIncrease;
+        totalMoveSpeedMultiplier -= mod.moveSpeedMultiplier;
+
+        totalKnockbackIncrease -= mod.knockbackIncrease;
+        totalKnockbackMulitplier -= mod.knockbackMulitplier;
+
+        RecalculateStats();
+        UpdatePlayerHealth();
+        UpdatePlayerMoveSpeed();
+    }
+
+    public void RecalculateStats()
     {
         totalDamage = totalDamageIncrease * totalDamageMultiplier;
         totalProjectileSpeed = totalProjectileSpeedIncrease * totalProjectileSpeedMulitplier;
@@ -91,9 +128,6 @@ public class CombatManager : MonoBehaviour
         totalMoveSpeed = totalMoveSpeedIncrease * totalMoveSpeedMultiplier;
         totalKnockback = totalKnockbackIncrease * totalKnockbackMulitplier;
     }
-
-   
-
     private void GetPlayerStatValues(PlayerInfo stats)
     {
         totalDamageIncrease += stats.baseDamageIncrease;
@@ -101,7 +135,6 @@ public class CombatManager : MonoBehaviour
         totalMoveSpeedIncrease += stats.baseMoveSpeed;
         totalProjectileSpeedIncrease += stats.baseProjetileSpeedIncrease;     
     }
-
     private void UpdatePlayerHealth()
     {
         PlayerInfo playerInfo = gameObject.GetComponent<PlayerInfo>();
@@ -110,9 +143,12 @@ public class CombatManager : MonoBehaviour
         playerInfo.maxHealth = Mathf.RoundToInt(totalHealth);
 
     }
-
     private void UpdatePlayerMoveSpeed()
     {
-        gameObject.GetComponent<PlayerMovement>().moveSpeed = totalMoveSpeed;
+        gameObject.GetComponent<PlayerLocomotion>().moveSpeed = totalMoveSpeed;
     }
+
+
+
+
 }

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5284201489974541659}
   - component: {fileID: 6426884709924699773}
-  - component: {fileID: 4083423443894874935}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -31,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4417331412285935041}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &6426884709924699773
 BoxCollider2D:
@@ -43,7 +42,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.109312594, y: -0.343231}
@@ -57,29 +56,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5187, y: 0.1785925}
+  m_Size: {x: 0.52, y: 0.18}
   m_EdgeRadius: 0
---- !u!50 &4083423443894874935
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4984080485949290052}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!1 &5050031618053744480
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +87,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4417331412285935041}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7549026214623720308
 GameObject:
@@ -123,7 +101,7 @@ GameObject:
   - component: {fileID: 5664169413371118482}
   m_Layer: 0
   m_Name: Knife
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -135,16 +113,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7549026214623720308}
-  m_LocalRotation: {x: -0, y: -0, z: -0.4951448, w: 0.8688105}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: -0, y: -0, z: -0.038003344, w: 0.99927765}
+  m_LocalPosition: {x: 0.0036335, y: -0.021762, z: -0.027041}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 3546224787382470928}
   - {fileID: 5284201489974541659}
+  - {fileID: 3546224787382470928}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -59.359}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -4.356}
 --- !u!212 &5664169413371118482
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -183,8 +161,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1920763999
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: 1024558946, guid: 77b4475c87f806b4984148dd1fa3528a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Modifier
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -61,7 +62,7 @@ TagManager:
   - name: Projectiles
     uniqueID: 3979065163
     locked: 0
-  - name: Modifiers
+  - name: Items
     uniqueID: 1920763999
     locked: 0
   - name: Player

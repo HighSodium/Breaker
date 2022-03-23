@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Modifier : MonoBehaviour
+public class Modifier : BaseItem
 {
-    public string modName = "Default Name";
-    public string description = "...Information Withheld...";
-    
     [Tooltip("As a flat increase.")]
     public float damageIncrease = 0; // flat value increase
     [Tooltip("As a percentage multiplier.")]
@@ -32,11 +29,17 @@ public class Modifier : MonoBehaviour
     [Tooltip("As a percentage multiplier.")]
     public float knockbackMulitplier = 0;
 
+
     public int stackMax;
+    public bool isInWorld = true;
 
-    public Sprite icon;
-    protected AudioClip pickupSound;
-
+    private void FixedUpdate()
+    {
+        if (isInWorld)
+        {
+            transform.Rotate(transform.forward, 8);
+        }
+    }
     private void Start()
     {
         icon = gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -45,8 +48,9 @@ public class Modifier : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            isInWorld = false;
             other.gameObject.GetComponent<CombatManager>().AddModifier(this);
-            Destroy(gameObject);
         }
-    }
+    }  
 }
+ 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerLocomotion : MonoBehaviour
 {
 
     public float moveSpeed;
@@ -11,8 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 mouseScreenPos;
     private Vector2 mouseWorldPos;
 
-
-
+    private bool mouseLeft;
+    private bool mouseRight;
 
 
     // Start is called before the first frame update
@@ -21,13 +21,11 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-
-
     private void FixedUpdate()
     {
         // movement
         
-        gameObject.transform.Translate(moveInput * (moveSpeed / 100), Space.World);
+        transform.Translate(moveInput * (moveSpeed / 100), Space.World);
 
         //mouse aim
         mouseScreenPos = (Vector2)Mouse.current.position.ReadValue();
@@ -38,13 +36,7 @@ public class PlayerMovement : MonoBehaviour
         float angle = Vector2.SignedAngle(Vector2.right, mouseDirection);
         transform.eulerAngles = new Vector3(0, 0, angle);
         //Vector3 lookPos = new Vector3(mouseWorldPos.x, mouseWorldPos.y, transform.position.z);
-
-    }
-    // Update is called once per frame
-    void Update()
-    {
- 
-
+         
     }
 
     public void OnMove(InputValue input)
@@ -52,8 +44,33 @@ public class PlayerMovement : MonoBehaviour
         moveInput = input.Get<Vector2>();
     }
 
+    public void OnPrimaryFire(InputValue input)
+    {
+        mouseLeft = input.isPressed;
+        
+    }
+    public void OnSecondaryFire(InputValue input)
+    {
+        mouseRight = input.isPressed;
+    }
+
+    public void OnTriggerStay2D(Collider2D other)
+    {
+        if (mouseLeft)
+        {
+            if (other.transform.root.CompareTag("Weapon"))
+            {
+                Debug.Log("YOU DID IT!");
+                //AddToWeaponUI(other.transform.root);
 
 
+                return;
+            }
+            Debug.Log("incorrect type detected -> " + other.gameObject.GetType().Name);
+
+        }
+
+    }
     #region STAT MODIFIERS
 
     public void UpdateMoveSpeed(float updatedSpeed)
