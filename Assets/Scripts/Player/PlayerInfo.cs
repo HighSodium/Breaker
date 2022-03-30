@@ -21,7 +21,6 @@ public class PlayerInfo : MonoBehaviour
 
     private void Start()
     {
-        maxHealth = baseHealth;
-        currentHealth = maxHealth;
+        currentHealth = maxHealth = baseHealth;
     }
 }

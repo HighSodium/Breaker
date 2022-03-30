@@ -7,6 +7,8 @@ public abstract class Weapon : BaseItem
     public CombatManager manager;
     public GameObject primarySpawn;
     public GameObject secondarySpawn;
+    public Animation primaryAnimation;
+    public Animation secondaryAnimation;
     // stats
     
     public float projectileHealth;
@@ -19,11 +21,11 @@ public abstract class Weapon : BaseItem
     [Tooltip("Attacks per second (1/DPS)")]
     public float secondaryAttackRate;
 
-
     public float attackRateMultiplier;
 
     // functionality
     private bool cooldownReady = true;
+    public bool isPrimary;
 
 
     //ProjectileEffect effect;
@@ -39,7 +41,7 @@ public abstract class Weapon : BaseItem
         {
             PrimaryAbility();
             cooldownReady = false;
-            StartCoroutine(DelayCooldown(primaryAttackRate * attackRateMultiplier));
+            StartCoroutine(DelayCooldown(primaryAttackRate));
         }
         else
         {
@@ -53,7 +55,7 @@ public abstract class Weapon : BaseItem
         {
             SecondaryAbility();
             cooldownReady = false;
-            StartCoroutine(DelayCooldown(secondaryAttackRate * attackRateMultiplier));
+            StartCoroutine(DelayCooldown(secondaryAttackRate));
         }
         else
         {
@@ -66,25 +68,29 @@ public abstract class Weapon : BaseItem
         manager = transform.root.GetComponent<CombatManager>();
         primarySpawn = manager.primaryProjectileSpawn;
         secondarySpawn = manager.secondaryProjectileSpawn;
-        attackRateMultiplier = manager.totalAttackSpeedMultiplier;
+        UpdateAttackSpeed();
+        
     }
     public void OnDrop()
     {
         manager = null;
-        StartCoroutine(DelayPickup(1f));
+        StartCoroutine(DelayEnable(1f));
     }
 
-
+    public float UpdateAttackSpeed()
+    {
+        return attackRateMultiplier = manager.totalAttackSpeedMultiplier;
+    }
     public IEnumerator DelayCooldown(float attackRate)
     {
-        
+        UpdateAttackSpeed();
         cooldownReady = false;
-        float timeInSeconds = 1 / attackRate;
+        float timeInSeconds = 1 / (attackRate*attackRateMultiplier);
         Debug.Log("Cooldown is: " + timeInSeconds);
         yield return new WaitForSeconds(timeInSeconds);  
         cooldownReady = true;
     }
-    public IEnumerator DelayPickup(float timeInSeconds)
+    public IEnumerator DelayEnable(float timeInSeconds)
     {
         yield return new WaitForSeconds(timeInSeconds);
         transform.Find("Collider").GetComponent<BoxCollider2D>().enabled = true;

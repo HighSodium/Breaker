@@ -182,7 +182,7 @@ public class CombatManager : MonoBehaviour
     }
     private void UpdatePlayerMoveSpeed()
     {
-        gameObject.GetComponent<PlayerLocomotion>().moveSpeed = totalMoveSpeed;
+        gameObject.GetComponent<CharacterLocomotion>().moveSpeed = totalMoveSpeed;
     }
     private void AttachToWeaponSlot(bool primary, GameObject weapon)
     {

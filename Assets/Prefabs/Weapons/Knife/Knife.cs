@@ -26,11 +26,10 @@ public class Knife : Weapon
     {
         if (projectileObj != null)
         {
-            Debug.Log("FIRE KNIFE!  ||=BBBBBBBBBB>");
+            //Debug.Log("FIRE KNIFE!  ||=BBBBBBBBBB>");
             Transform spawnTransform = secondarySpawn.transform;     
             previousProjectile = Instantiate(projectileObj, spawnTransform.position, spawnTransform.rotation);
-            Debug.Log(spawnTransform.rotation);
-            Debug.Log(previousProjectile.transform.rotation);
+
 
             //TODO: Update the projectile stats
         }

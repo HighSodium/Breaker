@@ -313,12 +313,14 @@ MonoBehaviour:
   manager: {fileID: 0}
   primarySpawn: {fileID: 0}
   secondarySpawn: {fileID: 0}
+  primaryAnimation: {fileID: 0}
+  secondaryAnimation: {fileID: 0}
   projectileHealth: 0
   knockback: 0
   primaryDamage: 0
   secondaryDamage: 0
-  primaryAttackRate: 4
-  secondaryAttackRate: 10
+  primaryAttackRate: 2.5
+  secondaryAttackRate: 5
   attackRateMultiplier: 0
   projectileObj: {fileID: 7549026214623720308, guid: 2ca88dc4ea4a6fb42a8d84d0a19c0264, type: 3}
   projectileScript: {fileID: 0}

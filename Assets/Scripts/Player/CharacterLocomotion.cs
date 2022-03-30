@@ -4,13 +4,12 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 
-public class PlayerLocomotion : MonoBehaviour
+public class CharacterLocomotion : MonoBehaviour
 {
 
     public float moveSpeed;
 
     private Vector2 moveInput;
-    private Vector2 mouseScreenPos;
     private Vector2 mouseWorldPos;
 
     private bool mouseLeft;
@@ -18,6 +17,8 @@ public class PlayerLocomotion : MonoBehaviour
     private bool mouseRightDown;
     private bool mouseLeftDown;
     private bool readyToFire;
+
+    private bool isPlayer;
 
     private List<Collider2D> pickupColliders;
     private CombatManager combatManager;
@@ -28,20 +29,33 @@ public class PlayerLocomotion : MonoBehaviour
         pickupColliders = new List<Collider2D>();
         combatManager = gameObject.GetComponent<CombatManager>();
         readyToFire = false;
+        isPlayer = gameObject.transform.root.CompareTag("Player") ? true : false;
+
     }
 
     private void FixedUpdate()
-    {    
+    {
         // movement
-        transform.Translate(moveInput * (moveSpeed / 100), Space.World);
+        
+        //transform.Translate(moveInput * (moveSpeed / 100), Space.World);
 
         //mouse aim
-        mouseScreenPos = Mouse.current.position.ReadValue();
-        mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos, Camera.MonoOrStereoscopicEye.Mono);
-        Vector2 mouseDirection = mouseWorldPos - (Vector2)transform.position;
+        if (isPlayer)
+        {
+            MoveTowards(moveInput);
 
-        float angle = Vector2.SignedAngle(Vector2.right, mouseDirection);
-        transform.eulerAngles = new Vector3(0, 0, angle);
+            mouseWorldPos = GetMouseToWorldPos();
+            LookAtPos(mouseWorldPos);
+        }
+        else
+        {
+
+        }
+        
+        //Vector2 mouseDirection = mouseWorldPos - (Vector2)transform.position;
+
+        //float angle = Vector2.SignedAngle(Vector2.right, mouseDirection);
+        //transform.eulerAngles = new Vector3(0, 0, angle);
 
         if (readyToFire)
         {
@@ -55,6 +69,24 @@ public class PlayerLocomotion : MonoBehaviour
             }
         }
 
+    }
+    
+    public void MoveTowards(Vector2 location)
+    {
+        transform.Translate(location * (moveSpeed / 100), Space.World);
+    }
+
+    private Vector2 GetMouseToWorldPos()
+    {
+        Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
+        return Camera.main.ScreenToWorldPoint(mouseScreenPos, Camera.MonoOrStereoscopicEye.Mono);
+    }
+    private void LookAtPos(Vector2 position)
+    {
+        Vector2 mouseDirection = position - (Vector2)transform.position;
+
+        float angle = Vector2.SignedAngle(Vector2.right, mouseDirection);
+        transform.eulerAngles = new Vector3(0, 0, angle);
     }
     public void OnMove(InputValue input)
     {
@@ -138,7 +170,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     #region STAT MODIFIERS
 
-    public void UpdateMoveSpeed(float updatedSpeed)
+    public void UpdateMovementStats(float updatedSpeed)
     {
         moveSpeed = updatedSpeed;
     }

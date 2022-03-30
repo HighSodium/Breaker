@@ -136,7 +136,7 @@ MonoBehaviour:
   healthIncrease: 15
   healthMultiplier: 0.2
   moveSpeedIncrease: 1
-  moveSpeedMultiplier: 0.1
+  moveSpeedMultiplier: 0.02
   knockbackIncrease: 0
   knockbackMulitplier: 0
   attackSpeedIncrease: 0
