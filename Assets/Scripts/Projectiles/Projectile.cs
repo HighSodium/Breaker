@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Projectile : BaseItem
+public class Projectile : MonoBehaviour
 {
+    public string projectileName;
     public float damage;
     public float speed;
     public float health;
     public float knockback;
-    public float lifespan;
-    public float pierceCount; 
+    public float lifespan = 1;
+    public float pierceCount = 1; 
     
     //public Status 
     //public Effect projEffect
@@ -26,6 +27,7 @@ public class Projectile : BaseItem
     void Awake()
     {
         // MAKE FINAL CALCULATIONS FOR DAMAGE HERE
+        StartCoroutine(DestroyDelay(lifespan));
     }
 
     // Update is called once per frame
@@ -36,32 +38,39 @@ public class Projectile : BaseItem
 
     private void FixedUpdate()
     {
-        MoveProjectile(speed / 100);
-        
+        MoveProjectile(speed);
+  
     }
+
+    //TODO: Why is the projectile overroating??!
 
     public virtual void MoveProjectile(float speed)
     {
-        transform.Translate(transform.right * (speed / 100), Space.Self);
+        transform.Translate(transform.right * (speed / 100), Space.World);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        //if(other.gameObject.CompareTag("Enemy"){
+        if(other.gameObject.CompareTag("Enemy")){
         //  other.gameObject.ApplyDamage;
-        //}
+        }
 
         if (!other.gameObject.CompareTag("Player"))
         {
             pierceCount--;
-
             //other.TryGetComponent<EnemyManager>().ApplyDamage(damage);
 
-            if (pierceCount == 0)
+            if (pierceCount < 0)
             {
                 Destroy(gameObject);
             }
 
         }
+    }
+
+    IEnumerator DestroyDelay(float timeInSeconds)
+    {
+        yield return new WaitForSeconds(timeInSeconds);
+        Destroy(transform.root.gameObject);
     }
 }

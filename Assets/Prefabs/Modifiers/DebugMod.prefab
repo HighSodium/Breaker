@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 127662019184446832}
-  - component: {fileID: 8472833782135316159}
-  - component: {fileID: 3904070997547415469}
   - component: {fileID: 7622833938630218306}
   - component: {fileID: 148616602096845293}
+  - component: {fileID: 1390011360339526979}
   m_Layer: 0
   m_Name: DebugMod
   m_TagString: Modifier
@@ -35,45 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8472833782135316159
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2213304826986211116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d45e1c8fdfd77449bfe83e181ff61cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  modName: Default Name
-  description: ...Information Withheld...
-  damageIncrease: 1
-  damageMultiplier: 0.1
-  projectileSpeedIncrease: 0
-  projectileSpeedMulitplier: 1
-  healthIncrease: 20
-  healthMultiplier: 0
-  moveSpeedIncrease: 0
-  moveSpeedMultiplier: 0.1
-  knockbackIncrease: 0
-  knockbackMulitplier: 0
-  stackMax: 50
-  icon: {fileID: 0}
---- !u!114 &3904070997547415469
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2213304826986211116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1747be9eed095a84881196d5f79782df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tick: 0
 --- !u!212 &7622833938630218306
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -120,7 +80,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.703125, y: 0.609375}
+  m_Size: {x: 0.59375, y: 0.40625}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -144,7 +104,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.59375, y: 0.40625}
-    newSize: {x: 0.703125, y: 0.609375}
+    newSize: {x: 0.59375, y: 0.40625}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -152,3 +112,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6105845, y: 0.4176839}
   m_EdgeRadius: 0
+--- !u!114 &1390011360339526979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2213304826986211116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6a0ac65f3f7b864da88f55b4c6a70ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  itemName: DEBUG MOD
+  description: ..... de-bug-ing......
+  canBePickedUp: 1
+  pickedUp: 0
+  damageIncrease: 5
+  damageMultiplier: 0.25
+  projectileSpeedIncrease: 0
+  projectileSpeedMulitplier: 0
+  healthIncrease: 15
+  healthMultiplier: 0.2
+  moveSpeedIncrease: 1
+  moveSpeedMultiplier: 0.1
+  knockbackIncrease: 0
+  knockbackMulitplier: 0
+  attackSpeedIncrease: 0
+  attackSpeedMultiplyer: 0.5
+  stackMax: 999

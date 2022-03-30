@@ -8,6 +8,7 @@ public class PlayerInfo : MonoBehaviour
     public float baseDamageIncrease;
     public float baseProjetileSpeedIncrease; //in percent
     public int baseHealth;
+    public int baseShield;
     public float baseMoveSpeed;
 
     public float baseArmor;

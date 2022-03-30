@@ -33,9 +33,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "PrimaryFireDown",
+                    "type": "Button",
+                    "id": "c28c03b7-a3c5-40b2-80d8-8c1bb793ad09",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SecondaryFire",
                     "type": "PassThrough",
                     "id": "f16ff509-9f49-4dfd-8a75-916ab721b603",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryFireDown",
+                    "type": "Button",
+                    "id": "86a1604a-b3f5-4202-a1b5-661748ea2187",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -326,6 +344,72 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "SecondaryFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4c4299dc-4459-46b4-8a92-35f25f863a87",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PrimaryFireDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "73d8e17a-934c-44c0-8554-03983df42b58",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PrimaryFireDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0c4ae679-6407-4787-b698-97a7667412da",
+                    "path": "<XRController>/{PrimaryAction}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "PrimaryFireDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a678d551-ca3a-47bb-964c-8c33b5a468bb",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SecondaryFireDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "45646ac9-d330-4f01-b630-439d17cf08b0",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "SecondaryFireDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c28f82c1-8d51-4e6d-a1dd-095fa56f244a",
+                    "path": "*/{SecondaryAction}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "SecondaryFireDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

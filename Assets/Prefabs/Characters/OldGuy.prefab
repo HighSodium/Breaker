@@ -41,9 +41,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4951729219056436847}
   m_Layer: 0
-  m_Name: PrimaryWeapon
+  m_Name: PrimarySocket
   m_TagString: Untagged
-  m_Icon: {fileID: -4521532143779581420, guid: 36974d33f9443e44fb53fa5c8beec9c1, type: 3}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -73,7 +73,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2052153557054806049}
   m_Layer: 0
-  m_Name: SecondaryWeapon
+  m_Name: SecondarySocket
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,12 +151,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   modList: []
+  primaryWeapon: {fileID: 0}
+  secondaryWeapon: {fileID: 0}
+  primaryWeaponSocket: {fileID: 2827596718416682715}
+  secondaryWeaponSocket: {fileID: 5965354588190260377}
+  primaryProjectileSpawn: {fileID: 7333776691212443287}
+  secondaryProjectileSpawn: {fileID: 1508253434649252052}
+  primaryWeaponScript: {fileID: 0}
+  secondaryWeaponScript: {fileID: 0}
   totalDamageIncrease: 0
   totalDamageMultiplier: 1
   totalDamage: 0
   totalProjectileSpeedIncrease: 0
   totalProjectileSpeedMulitplier: 1
   totalProjectileSpeed: 0
+  totalAttackSpeedIncrease: 0
+  totalAttackSpeedMultiplier: 1
+  totalAttackSpeed: 0
   totalHealthIncrease: 0
   totalHealthMuliplier: 1
   totalHealth: 0
@@ -181,6 +192,7 @@ MonoBehaviour:
   baseDamageIncrease: 0
   baseProjetileSpeedIncrease: 0
   baseHealth: 50
+  baseShield: 0
   baseMoveSpeed: 14
   baseArmor: 1
   maxHealth: 0
@@ -337,7 +349,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0d38ed245440df34887aae6047678147, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c169584adfd0ba14a914a422680e8c86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -456,7 +468,7 @@ GameObject:
   m_Layer: 0
   m_Name: PrimarySpawn
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -4521532143779581420, guid: 36974d33f9443e44fb53fa5c8beec9c1, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1

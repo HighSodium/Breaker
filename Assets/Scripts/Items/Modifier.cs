@@ -29,17 +29,15 @@ public class Modifier : BaseItem
     [Tooltip("As a percentage multiplier.")]
     public float knockbackMulitplier = 0;
 
+    [Tooltip("As a flat increase.")]
+    public float attackSpeedIncrease = 0;
+    [Tooltip("As a percentage multiplier.")]
+    public float attackSpeedMultiplyer = 0;
+
 
     public int stackMax;
-    public bool isInWorld = true;
 
-    private void FixedUpdate()
-    {
-        if (isInWorld)
-        {
-            transform.Rotate(transform.forward, 8);
-        }
-    }
+    
     private void Start()
     {
         icon = gameObject.GetComponent<SpriteRenderer>().sprite;
@@ -48,8 +46,12 @@ public class Modifier : BaseItem
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            isInWorld = false;
-            other.gameObject.GetComponent<CombatManager>().AddModifier(this);
+            //deactivate object, add to mod list, and parent to player
+            gameObject.SetActive(false);
+            pickedUp = true;
+            other.gameObject.GetComponent<CombatManager>().AddModifier(this);          
+            gameObject.transform.position = other.transform.position;
+            transform.parent = other.transform;
         }
     }  
 }
