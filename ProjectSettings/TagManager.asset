@@ -7,6 +7,8 @@ TagManager:
   - Enemy
   - Modifier
   - Weapon
+  - Projectile
+  - Solid
   layers:
   - Default
   - TransparentFX
@@ -53,8 +55,8 @@ TagManager:
   - name: GroundDeco
     uniqueID: 927936925
     locked: 0
-  - name: Colliders
-    uniqueID: 2387418477
+  - name: Items
+    uniqueID: 1920763999
     locked: 0
   - name: Enemies
     uniqueID: 2021093927
@@ -62,9 +64,9 @@ TagManager:
   - name: Projectiles
     uniqueID: 3979065163
     locked: 0
-  - name: Items
-    uniqueID: 1920763999
-    locked: 0
   - name: Player
     uniqueID: 3176302733
+    locked: 0
+  - name: Colliders
+    uniqueID: 2387418477
     locked: 0

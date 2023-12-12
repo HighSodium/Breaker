@@ -4,11 +4,8 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 
-public class CharacterLocomotion : MonoBehaviour
+public class PlayerBehavior : EntityBehavior
 {
-
-    public float moveSpeed;
-
     private Vector2 moveInput;
     private Vector2 mouseWorldPos;
 
@@ -16,62 +13,43 @@ public class CharacterLocomotion : MonoBehaviour
     private bool mouseRight;
     private bool mouseRightDown;
     private bool mouseLeftDown;
-    private bool readyToFire;
+    private bool rightFireReady;
+    private bool leftFireReady;
 
     private bool isPlayer;
 
     private List<Collider2D> pickupColliders;
-    private CombatManager combatManager;
 
     // Start is called before the first frame update
     void Start()
     {
         pickupColliders = new List<Collider2D>();
         combatManager = gameObject.GetComponent<CombatManager>();
-        readyToFire = false;
+        rightFireReady = leftFireReady = false;
         isPlayer = gameObject.transform.root.CompareTag("Player") ? true : false;
-
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        // movement
-        
-        //transform.Translate(moveInput * (moveSpeed / 100), Space.World);
 
-        //mouse aim
-        if (isPlayer)
+        if (mouseLeft & leftFireReady)
         {
-            MoveTowards(moveInput);
-
-            mouseWorldPos = GetMouseToWorldPos();
-            LookAtPos(mouseWorldPos);
+            combatManager.FirePrimary();
         }
-        else
+        if (mouseRight & rightFireReady)
         {
-
-        }
-        
-        //Vector2 mouseDirection = mouseWorldPos - (Vector2)transform.position;
-
-        //float angle = Vector2.SignedAngle(Vector2.right, mouseDirection);
-        //transform.eulerAngles = new Vector3(0, 0, angle);
-
-        if (readyToFire)
-        {
-            if (mouseLeft)
-            {
-                combatManager.FirePrimary();
-            }
-            else if (mouseRight)
-            {
-                combatManager.FireSecondary();
-            }
+            combatManager.FireSecondary();
         }
 
+        mouseWorldPos = GetMouseToWorldPos();
+        LookAtPos(mouseWorldPos);
+    }
+    private void FixedUpdate()
+    {      
+        MoveTowards(moveInput);
     }
     
-    public void MoveTowards(Vector2 location)
+    public override void MoveTowards(Vector2 location)
     {
         transform.Translate(location * (moveSpeed / 100), Space.World);
     }
@@ -81,13 +59,6 @@ public class CharacterLocomotion : MonoBehaviour
         Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
         return Camera.main.ScreenToWorldPoint(mouseScreenPos, Camera.MonoOrStereoscopicEye.Mono);
     }
-    private void LookAtPos(Vector2 position)
-    {
-        Vector2 mouseDirection = position - (Vector2)transform.position;
-
-        float angle = Vector2.SignedAngle(Vector2.right, mouseDirection);
-        transform.eulerAngles = new Vector3(0, 0, angle);
-    }
     public void OnMove(InputValue input)
     {
         moveInput = input.Get<Vector2>();
@@ -96,21 +67,19 @@ public class CharacterLocomotion : MonoBehaviour
     public void OnPrimaryFire(InputValue input)
     {      
         mouseLeft = input.isPressed;
-
+        
         if (mouseLeft)
-        {
-            
+        {  
             GameObject itemGrab = FindClosestItem("Weapon");
             if (itemGrab != null)
             {
-                readyToFire = false;
+                leftFireReady = false;
                 combatManager.EquipPrimary(itemGrab);
             }           
-        }
-        
-        else if (!mouseLeft)
+        }       
+        else 
         {
-            readyToFire = true;
+            leftFireReady = true;
         }
     }
     public void OnSecondaryFire(InputValue input)
@@ -118,22 +87,30 @@ public class CharacterLocomotion : MonoBehaviour
         mouseRight = input.isPressed;
 
         if (mouseRight)
-        {
-            
+        {        
             GameObject itemGrab = FindClosestItem("Weapon");
             if (itemGrab != null)
             {
-                readyToFire = false;
+                rightFireReady = false;
                 combatManager.EquipSecondary(itemGrab);
             }
         }
-
-        if (!mouseRight)
+        else
         {
-            readyToFire = true;
+            rightFireReady = true;
         }
     }
+    public override void OnDeath()
+    {
+        Destroy(gameObject);
+        Debug.LogError("YOU ARE DEAD! DEAD! DEAD!");
+    }
 
+    public override void OnDamage(GameObject source, int damage)
+    {
+        Debug.Log("OUCH, my health! *cough cough*");
+        throw new NotImplementedException();
+    }
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.root.CompareTag("Weapon"))
@@ -168,13 +145,4 @@ public class CharacterLocomotion : MonoBehaviour
         return closest.transform.root.gameObject;
     }
 
-    #region STAT MODIFIERS
-
-    public void UpdateMovementStats(float updatedSpeed)
-    {
-        moveSpeed = updatedSpeed;
-    }
-
-
-    #endregion
 }

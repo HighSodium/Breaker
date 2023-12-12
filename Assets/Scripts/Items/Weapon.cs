@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Weapon : BaseItem
@@ -7,25 +8,38 @@ public abstract class Weapon : BaseItem
     public CombatManager manager;
     public GameObject primarySpawn;
     public GameObject secondarySpawn;
-    public Animation primaryAnimation;
-    public Animation secondaryAnimation;
+    public Animation anim;
+
+    //public Animation primaryAnimation;
+    //public Animation secondaryAnimation;
     // stats
-    
-    public float projectileHealth;
-    public float knockback;
 
-    public float primaryDamage;
-    public float secondaryDamage;
+    [Header("Projectile Stats")]
+    public List<GameObject> projectileObjs;
+    public int projectileHealth;
+    public float projectileLifetime;
+    public float projectileSpeed;
+    public float projectileDamage;
+    public int projectilePierceCount;
+    public bool projectilePierceAll;
+    [Header("Damage Stats")]
+    public int primaryDamage;
+    public int secondaryDamage;
     [Tooltip ("Attacks per second (1/DPS)")]
-    public float primaryAttackRate;
+    public float primaryAttacksPerSec;
     [Tooltip("Attacks per second (1/DPS)")]
-    public float secondaryAttackRate;
-
-    public float attackRateMultiplier;
-
+    public float secondaryAttacksPerSec;
+    public float attackRateMultiplier = 1;
+    [Space]
+    public float knockback;
     // functionality
-    private bool cooldownReady = true;
+    private bool primaryCooldownReady = true;
+    private bool secondaryCooldownReady = true;
     public bool isPrimary;
+
+    public bool canDamage = true;
+    public int attackPhase = 1;
+    public int attackPhaseMax;
 
 
     //ProjectileEffect effect;
@@ -34,14 +48,16 @@ public abstract class Weapon : BaseItem
     public abstract void PrimaryAbility();
     public abstract void SecondaryAbility();
 
-
+    private void Start()
+    {
+        Debug.Assert(attackPhaseMax != 0, "Weapon needs a number of primary attack phases. Set in prefab.");
+    }
     public void UsePrimaryAbility() {
 
-        if (cooldownReady)
+        if (primaryCooldownReady)
         {
             PrimaryAbility();
-            cooldownReady = false;
-            StartCoroutine(DelayCooldown(primaryAttackRate));
+            StartCoroutine(StartPrimaryCooldown(primaryAttacksPerSec));
         }
         else
         {
@@ -51,11 +67,10 @@ public abstract class Weapon : BaseItem
     }
     public void UseSecondaryAbility()
     {
-        if (cooldownReady)
+        if (secondaryCooldownReady)
         {
-            SecondaryAbility();
-            cooldownReady = false;
-            StartCoroutine(DelayCooldown(secondaryAttackRate));
+            SecondaryAbility();          
+            StartCoroutine(StartSecondaryCooldown(secondaryAttacksPerSec));
         }
         else
         {
@@ -65,30 +80,39 @@ public abstract class Weapon : BaseItem
     public void OnPickup()
     {
         pickedUp = true;
-        manager = transform.root.GetComponent<CombatManager>();
-        primarySpawn = manager.primaryProjectileSpawn;
-        secondarySpawn = manager.secondaryProjectileSpawn;
         UpdateAttackSpeed();
         
     }
     public void OnDrop()
     {
+        transform.parent = null;
         manager = null;
         StartCoroutine(DelayEnable(1f));
     }
 
+    public void ApplyDamage(float damage)
+    {
+
+    }
     public float UpdateAttackSpeed()
     {
         return attackRateMultiplier = manager.totalAttackSpeedMultiplier;
     }
-    public IEnumerator DelayCooldown(float attackRate)
+    public IEnumerator StartPrimaryCooldown(float attackRate)
     {
         UpdateAttackSpeed();
-        cooldownReady = false;
+        primaryCooldownReady = false;
+        float timeInSeconds = 1 / (attackRate * attackRateMultiplier);
+        yield return new WaitForSeconds(timeInSeconds);
+        primaryCooldownReady = true;
+    }
+    public IEnumerator StartSecondaryCooldown(float attackRate)
+    {
+        UpdateAttackSpeed();
+        secondaryCooldownReady = false;
         float timeInSeconds = 1 / (attackRate*attackRateMultiplier);
-        Debug.Log("Cooldown is: " + timeInSeconds);
         yield return new WaitForSeconds(timeInSeconds);  
-        cooldownReady = true;
+        secondaryCooldownReady = true;
     }
     public IEnumerator DelayEnable(float timeInSeconds)
     {

@@ -11,7 +11,7 @@ public class CombatManager : MonoBehaviour
     //List<PlayerMod> playerMods;
     //List<ProjectileMod> projectileMods;
     public List<Modifier> modList;
-    PlayerInfo playerStats;
+    EntityBehavior entityStats;
 
     public GameObject primaryWeapon;
     public Weapon primaryWeaponScript;
@@ -21,32 +21,34 @@ public class CombatManager : MonoBehaviour
     public GameObject secondaryWeapon;
     public Weapon secondaryWeaponScript;
     public GameObject secondaryWeaponSocket;    
-    public GameObject secondaryProjectileSpawn;    
+    public GameObject secondaryProjectileSpawn;
 
-
+    [Header("Damage")]
     public float totalDamageIncrease = 0; // flat value increase
     public float totalDamageMultiplier = 1; // percentage-based increase
     public float totalDamage;
-
+    [Header("Projectiles")]
     public float totalProjectileSpeedIncrease = 0;
     public float totalProjectileSpeedMulitplier = 1;
     public float totalProjectileSpeed;
-
+    [Header("Attack Speed")]
     public float totalAttackSpeedIncrease = 0;
     public float totalAttackSpeedMultiplier = 1;
     public float totalAttackSpeed;
-
+    [Header("Health")]
     public float totalHealthIncrease = 0;
     public float totalHealthMuliplier = 1;
     public float totalHealth;
-
+    [Header("Move Speed")]
     public float totalMoveSpeedIncrease = 0;
     public float totalMoveSpeedMultiplier = 1;
     public float totalMoveSpeed;
-
+    [Header("Knockback")]
     public float totalKnockbackIncrease = 0;
     public float totalKnockbackMulitplier = 1;
     public float totalKnockback;
+    [Header("Other Params")]
+    public bool useBothAbilities;
 
     float totalProjectileAmount;
 
@@ -54,13 +56,20 @@ public class CombatManager : MonoBehaviour
     void Start()
     {
         modList = new List<Modifier>();
-        playerStats = gameObject.GetComponent<PlayerInfo>();
-        GetPlayerStatValues(playerStats);// get base stats from player
+        //playerStats = (EntityBehavior)gameObject.GetComponent("EntityBehavior");
+        entityStats = gameObject.GetComponent<EntityBehavior>();
+        GetPlayerStatValues(entityStats);// get base stats from player
 
         RecalculateStats(); //update totals
 
         UpdatePlayerHealth(); // make starting health
         UpdatePlayerMoveSpeed(); // make starting speed
+
+        // check to see if the using character has a starting weapon
+
+        if (entityStats.startingPrimaryWeapon != null) EquipPrimary(Instantiate(entityStats.startingPrimaryWeapon));
+        if (entityStats.startingSecondaryWeapon != null) EquipSecondary(Instantiate(entityStats.startingSecondaryWeapon));
+
     }
 
     public void FirePrimary()
@@ -69,6 +78,7 @@ public class CombatManager : MonoBehaviour
         if (primaryWeapon != null)
         {
             primaryWeaponScript.UsePrimaryAbility();
+            if(useBothAbilities) primaryWeaponScript.UseSecondaryAbility();
         }
     }
     public void FireSecondary()
@@ -77,6 +87,7 @@ public class CombatManager : MonoBehaviour
         if (secondaryWeapon != null)
         {
             secondaryWeaponScript.UseSecondaryAbility();
+            if(useBothAbilities) secondaryWeaponScript.UsePrimaryAbility();
         }
     }
     public GameObject EquipPrimary(GameObject weapon)
@@ -165,7 +176,7 @@ public class CombatManager : MonoBehaviour
         totalAttackSpeed        = totalAttackSpeedIncrease      * totalAttackSpeedMultiplier;
         totalProjectileSpeed    = totalProjectileSpeedIncrease  * totalProjectileSpeedMulitplier;
     }
-    private void GetPlayerStatValues(PlayerInfo stats)
+    private void GetPlayerStatValues(EntityBehavior stats)
     {
         totalDamageIncrease += stats.baseDamageIncrease;
         totalHealthIncrease += stats.baseHealth;
@@ -174,35 +185,37 @@ public class CombatManager : MonoBehaviour
     }
     private void UpdatePlayerHealth()
     {
-        PlayerInfo playerInfo = gameObject.GetComponent<PlayerInfo>();
+        EntityBehavior playerInfo = (EntityBehavior)gameObject.GetComponent("EntityBehavior");
 
-        playerInfo.currentHealth += Mathf.RoundToInt((totalHealth - playerInfo.maxHealth));
+        playerInfo.health += Mathf.RoundToInt((totalHealth - playerInfo.maxHealth));
         playerInfo.maxHealth = Mathf.RoundToInt(totalHealth);
 
     }
     private void UpdatePlayerMoveSpeed()
     {
-        gameObject.GetComponent<CharacterLocomotion>().moveSpeed = totalMoveSpeed;
+        entityStats.UpdateMovementStats(totalMoveSpeed);
     }
-    private void AttachToWeaponSlot(bool primary, GameObject weapon)
+    private void AttachToWeaponSlot(bool isPrimary, GameObject weapon)
     {
         if (weapon == null) return;
-        EjectWeaponSlot(primary); //get rid of old weapons first
+        EjectWeaponSlot(isPrimary); //get rid of old weapons first
 
         Transform weaponTrans = weapon.transform;
         Weapon weaponScript = (Weapon)weapon.GetComponent("Weapon");  
 
         if (weaponScript != null)
         {
+            weaponScript.manager = this;
             weaponTrans.Find("Collider").gameObject.GetComponent<BoxCollider2D>().enabled = false;
             //find the primary position for parenting
 
-            Transform parentTrans = primary ? primaryWeaponSocket.transform : secondaryWeaponSocket.transform;
+            Transform parentTrans = isPrimary ? primaryWeaponSocket.transform : secondaryWeaponSocket.transform;
             weaponTrans.position = parentTrans.position;
             weaponTrans.rotation = parentTrans.rotation;
             weaponTrans.parent = parentTrans;
-            if (primary)
+            if (isPrimary)
             {
+                FlipWeapon(weapon);
                 primaryWeapon = weapon;
                 primaryWeaponScript = weaponScript;
             }
@@ -216,24 +229,22 @@ public class CombatManager : MonoBehaviour
 
         }  
     }
-    private void EjectWeaponSlot(bool primary)
+    private void EjectWeaponSlot(bool isPrimary)
     {
-        if (primary)
+        if (isPrimary)
         {
             if (!primaryWeapon) return;
-            primaryWeaponScript.OnDrop();
+            FlipWeapon(primaryWeapon);
             primaryWeapon.transform.position = GetRandomPosAroundPlayer(1.5f);
-            primaryWeapon.transform.parent = null;
+            primaryWeaponScript.OnDrop();
             primaryWeapon = null;
-            primaryWeaponScript = null;
+            primaryWeaponScript = null;      
         }
         else
-        {
-            
-            if (!secondaryWeapon) return;
-            secondaryWeaponScript.OnDrop();
+        {        
+            if (!secondaryWeapon) return;           
             secondaryWeapon.transform.position = GetRandomPosAroundPlayer(1.5f);
-            secondaryWeapon.transform.parent = null;
+            secondaryWeaponScript.OnDrop();
             secondaryWeapon = null;
             secondaryWeaponScript = null;
         }   
@@ -245,6 +256,11 @@ public class CombatManager : MonoBehaviour
         float y = MathF.Sin(rads);
         return (Vector2)transform.position + new Vector2(x, y) * radius;
     }
+    private void FlipWeapon(GameObject weapon)
+    {
+        weapon.transform.localScale = Vector3.Scale(weapon.transform.localScale, new Vector3(1, -1, 1));
+    }
+
 
 
 }

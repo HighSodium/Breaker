@@ -44,6 +44,7 @@ public class Modifier : BaseItem
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
+        //TODO: Move Mod pickup functionality to Combat Manager instead
         if (other.gameObject.CompareTag("Player"))
         {
             //deactivate object, add to mod list, and parent to player
