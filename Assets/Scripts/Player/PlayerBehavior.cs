@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 
-public class PlayerBehavior : EntityBehavior
+public class PlayerBehavior : CharacterBehavior
 {
     private Vector2 moveInput;
     private Vector2 mouseWorldPos;
@@ -27,6 +27,8 @@ public class PlayerBehavior : EntityBehavior
         combatManager = gameObject.GetComponent<CombatManager>();
         rightFireReady = leftFireReady = false;
         isPlayer = gameObject.transform.root.CompareTag("Player") ? true : false;
+
+        WhatAmI(StatusEffect.INVINCIBLE);
     }
 
     private void Update()
@@ -47,11 +49,6 @@ public class PlayerBehavior : EntityBehavior
     private void FixedUpdate()
     {      
         MoveTowards(moveInput);
-    }
-    
-    public override void MoveTowards(Vector2 location)
-    {
-        transform.Translate(location * (moveSpeed / 100), Space.World);
     }
 
     private Vector2 GetMouseToWorldPos()
@@ -100,17 +97,18 @@ public class PlayerBehavior : EntityBehavior
             rightFireReady = true;
         }
     }
-    public override void OnDeath()
+
+    public override void ApplyDamage(int damage, GameObject source = null, DamageType type = DamageType.NORMAL)
     {
-        Destroy(gameObject);
-        Debug.LogError("YOU ARE DEAD! DEAD! DEAD!");
+        base.ApplyDamage(damage, source, type);
+        StartCoroutine(DamageFlash(Color.red));
+        if (source != null) 
+            Debug.Log("You took damage from " + source.name + "!");
+        else
+            Debug.Log("You took damage from nothing?");
     }
 
-    public override void OnDamage(GameObject source, int damage)
-    {
-        Debug.Log("OUCH, my health! *cough cough*");
-        throw new NotImplementedException();
-    }
+
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.root.CompareTag("Weapon"))
@@ -130,7 +128,8 @@ public class PlayerBehavior : EntityBehavior
 
     private GameObject FindClosestItem(string tag)
     {
-        float minDist = 999;
+        
+        float minDist = float.PositiveInfinity;
         Collider2D closest = null;
         foreach (Collider2D pickup in pickupColliders)
         {         

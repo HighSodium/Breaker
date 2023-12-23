@@ -18,8 +18,9 @@ public class ThrownKnife : Projectile
 
         try
         {
-            EntityBehavior script = other.gameObject.GetComponent<EntityBehavior>();
-            if (script != null) script.TakeDamage(damage, gameObject);
+            Damageable script = other.gameObject.GetComponent<Damageable>();
+            if (script != null) 
+                script.ApplyDamage(damage, gameObject, damageType);
         }
         catch { }   
     }
@@ -28,7 +29,7 @@ public class ThrownKnife : Projectile
     {
         try
         {
-            other.gameObject.GetComponent<EntityBehavior>().TakeDamage(damage, gameObject);
+            other.gameObject.GetComponent<Damageable>().ApplyDamage(damage, gameObject, damageType);
         }
         catch
         {         
@@ -37,7 +38,7 @@ public class ThrownKnife : Projectile
             //other.gameObject.transform.parent.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.green;
             //transform.root.gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.blue;
             //Debug.Break();
-            Destroy(transform.root.gameObject);
+            //Destroy(transform.root.gameObject);
         }
         
     }

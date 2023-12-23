@@ -20,7 +20,7 @@ public class EntitySpawner : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating("SpawnEnemy", 0, spawnRate);
+        if(canSpawn) InvokeRepeating("SpawnEnemy", 0, spawnRate);
         SetRadius(detectRadius);
         
     }
@@ -30,13 +30,21 @@ public class EntitySpawner : MonoBehaviour
         if(spawnedEnemies.Count >= maxOutAtOnce) return;
 
         GameObject nextSpawn = enemiesToSpawn[Random.Range(0, enemiesToSpawn.Count)];
-        //if (!nextSpawn.GetType().IsSubclassOf(typeof(EntityBehavior))) return; // is it a derivative of EntityBehavior?
+        if (!nextSpawn.TryGetComponent<CharacterBehavior>(out CharacterBehavior temp))
+        {
+            Debug.LogWarning($"Tried to spawn entity ({temp.name}) that does not have a CharacterBehavior!");
+            return; // is it a derivative of EntityBehavior?
+        }
+            
 
-        nextSpawn.GetComponent<EntityBehavior>().spawnOwner = this;
-        spawnedEnemies.Add(Instantiate(nextSpawn, transform.position, transform.rotation));
+
+        GameObject lastSpawned = Instantiate(nextSpawn, transform.position, transform.rotation);
+        lastSpawned.GetComponent<CharacterBehavior>().spawnOwner = this;
+        spawnedEnemies.Add(lastSpawned);
         spawnedTotal++;
 
-        if((spawnedTotal >= spawnedMax & !infSpawn) || !canSpawn)
+        if (infSpawn) return;
+        if(spawnedTotal >= spawnedMax || !canSpawn)
         {
             CancelInvoke("SpawnEnemy");
         }
@@ -44,8 +52,8 @@ public class EntitySpawner : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (spawnedTotal >= spawnedMax) return;
-        if (collision.transform.root.CompareTag("Player") & isTrap)
+        if (spawnedTotal >= spawnedMax && !infSpawn) return;
+        if (collision.transform.root.CompareTag("Player") && isTrap && !canSpawn)
         {
             canSpawn = true;
             InvokeRepeating("SpawnEnemy", 0, spawnRate);
@@ -55,6 +63,7 @@ public class EntitySpawner : MonoBehaviour
     public void DespawnEnemy(GameObject enemy)
     {
         spawnedEnemies.Remove(enemy);
+        Destroy(enemy);
     }
     public void DespawnEnemy(List<GameObject> gameObjects)
     {

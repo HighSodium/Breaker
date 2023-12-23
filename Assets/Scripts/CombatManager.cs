@@ -1,6 +1,8 @@
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 
@@ -11,17 +13,21 @@ public class CombatManager : MonoBehaviour
     //List<PlayerMod> playerMods;
     //List<ProjectileMod> projectileMods;
     public List<Modifier> modList;
-    EntityBehavior entityStats;
+    CharacterBehavior entityStats;
 
+    [Header("-- Primary Weapon Info --")]
     public GameObject primaryWeapon;
     public Weapon primaryWeaponScript;
     public GameObject primaryWeaponSocket;
-    public GameObject primaryProjectileSpawn;
+    //public GameObject primaryProjectileSpawn;
+    public Animator primaryAnimator;
 
+    [Header("-- Secondary Weapon Info --")]
     public GameObject secondaryWeapon;
     public Weapon secondaryWeaponScript;
     public GameObject secondaryWeaponSocket;    
-    public GameObject secondaryProjectileSpawn;
+    //public GameObject secondaryProjectileSpawn; 
+    public Animator secondaryAnimator;
 
     [Header("Damage")]
     public float totalDamageIncrease = 0; // flat value increase
@@ -55,14 +61,15 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
+        
         modList = new List<Modifier>();
         //playerStats = (EntityBehavior)gameObject.GetComponent("EntityBehavior");
-        entityStats = gameObject.GetComponent<EntityBehavior>();
+        entityStats = gameObject.GetComponent<CharacterBehavior>();
         GetPlayerStatValues(entityStats);// get base stats from player
 
         RecalculateStats(); //update totals
 
-        UpdatePlayerHealth(); // make starting health
+        CreateStartingHealth(); // make starting health
         UpdatePlayerMoveSpeed(); // make starting speed
 
         // check to see if the using character has a starting weapon
@@ -72,6 +79,7 @@ public class CombatManager : MonoBehaviour
 
     }
 
+    //TODO: Pass increased damage modifier to weapon stats
     public void FirePrimary()
     {
         // do things that need to be done before firing;
@@ -79,6 +87,7 @@ public class CombatManager : MonoBehaviour
         {
             primaryWeaponScript.UsePrimaryAbility();
             if(useBothAbilities) primaryWeaponScript.UseSecondaryAbility();
+            
         }
     }
     public void FireSecondary()
@@ -176,7 +185,7 @@ public class CombatManager : MonoBehaviour
         totalAttackSpeed        = totalAttackSpeedIncrease      * totalAttackSpeedMultiplier;
         totalProjectileSpeed    = totalProjectileSpeedIncrease  * totalProjectileSpeedMulitplier;
     }
-    private void GetPlayerStatValues(EntityBehavior stats)
+    private void GetPlayerStatValues(CharacterBehavior stats)
     {
         totalDamageIncrease += stats.baseDamageIncrease;
         totalHealthIncrease += stats.baseHealth;
@@ -185,11 +194,17 @@ public class CombatManager : MonoBehaviour
     }
     private void UpdatePlayerHealth()
     {
-        EntityBehavior playerInfo = (EntityBehavior)gameObject.GetComponent("EntityBehavior");
+        CharacterBehavior playerInfo = (CharacterBehavior)gameObject.GetComponent("CharacterBehavior");
 
-        playerInfo.health += Mathf.RoundToInt((totalHealth - playerInfo.maxHealth));
+        playerInfo.Health += Mathf.RoundToInt((totalHealth - playerInfo.maxHealth));
         playerInfo.maxHealth = Mathf.RoundToInt(totalHealth);
+    }
+    private void CreateStartingHealth()
+    {
+        CharacterBehavior playerInfo = (CharacterBehavior)gameObject.GetComponent("CharacterBehavior");
 
+        playerInfo.maxHealth = Mathf.RoundToInt(totalHealth);
+        playerInfo.Health = Mathf.RoundToInt(playerInfo.maxHealth);
     }
     private void UpdatePlayerMoveSpeed()
     {
@@ -218,11 +233,15 @@ public class CombatManager : MonoBehaviour
                 FlipWeapon(weapon);
                 primaryWeapon = weapon;
                 primaryWeaponScript = weaponScript;
+                //primaryAnimation.AddClip(primaryWeaponScript.primaryAnimation,"panim");
+                primaryAnimator.runtimeAnimatorController = primaryWeaponScript.primaryAnimationController;
             }
             else
             {
                 secondaryWeapon = weapon;
                 secondaryWeaponScript = weaponScript;
+                //secondaryAnimation.AddClip(secondaryWeaponScript.secondaryAnimation,"sanim");
+                secondaryAnimator.runtimeAnimatorController = secondaryWeaponScript.secondaryAnimationController;
             }
             // make the weapon run its checks
             weaponScript.OnPickup();
@@ -238,7 +257,9 @@ public class CombatManager : MonoBehaviour
             primaryWeapon.transform.position = GetRandomPosAroundPlayer(1.5f);
             primaryWeaponScript.OnDrop();
             primaryWeapon = null;
-            primaryWeaponScript = null;      
+            primaryWeaponScript = null;
+            //secondaryAnimation.RemoveClip("panim");
+            //primaryAnimation = null;
         }
         else
         {        
@@ -247,6 +268,8 @@ public class CombatManager : MonoBehaviour
             secondaryWeaponScript.OnDrop();
             secondaryWeapon = null;
             secondaryWeaponScript = null;
+            //secondaryAnimation.RemoveClip("sanim");
+            //secondaryAnimation = null;
         }   
     }
     public Vector2 GetRandomPosAroundPlayer(float radius)

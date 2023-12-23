@@ -103,13 +103,13 @@ MonoBehaviour:
   enemiesToSpawn: []
   spawnedEnemies: []
   spawnedTotal: 0
-  spawnRate: 1
+  spawnRate: 0.5
   spawnedMax: 20
-  maxOutAtOnce: 3
-  canSpawn: 1
+  maxOutAtOnce: 10
+  canSpawn: 0
   infSpawn: 0
-  isTrap: 0
-  detectRadius: 1
+  isTrap: 1
+  detectRadius: 3
 --- !u!58 &8638572344514610003
 CircleCollider2D:
   m_ObjectHideFlags: 0

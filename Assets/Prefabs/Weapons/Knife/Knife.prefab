@@ -175,7 +175,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.114524126, y: -0.343231}
+  m_Offset: {x: -0.03717833, y: -0.343231}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -185,7 +185,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.53042305, y: 0.18}
+  m_Size: {x: 0.37579596, y: 0.18}
   m_EdgeRadius: 0
 --- !u!1 &5050031618053744480
 GameObject:
@@ -299,21 +299,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  itemName: Knife
+  itemName: 
   description: It's a knife. Playing with knives is dangerous... for the other person.
   canBePickedUp: 1
   pickedUp: 0
   manager: {fileID: 0}
   primarySpawn: {fileID: 5724715138505890601}
   secondarySpawn: {fileID: 5724715138505890601}
-  anim: {fileID: 0}
+  primaryAnimationController: {fileID: 9100000, guid: 71cc344339c7bf944ba7e5780325bb2d, type: 2}
+  secondaryAnimationController: {fileID: 0}
   projectileObjs:
   - {fileID: 7549026214623720308, guid: 2ca88dc4ea4a6fb42a8d84d0a19c0264, type: 3}
   projectileHealth: 10
   projectileLifetime: 0.8
   projectileSpeed: 40
-  projectileDamage: 5
-  projectilePierceCount: 0
+  projectileDamage: 1
+  projectilePierceCount: 1
+  projectilePierceAll: 0
+  primaryDamageType: 0
+  secondaryDamageType: 1
   primaryDamage: 15
   secondaryDamage: 5
   primaryAttacksPerSec: 1.5
@@ -325,6 +329,8 @@ MonoBehaviour:
   attackPhase: 0
   attackPhaseMax: 3
   projectileScript: {fileID: 0}
+  _knifeFans: 0
+  _knifeFanDegrees: 20
 --- !u!95 &5462103352474492691
 Animator:
   serializedVersion: 7
